@@ -43,6 +43,9 @@ public class LoginServlet extends HttpServlet {
             if(button.equals("Login")){
                 String username = request.getParameter("txtUsername");
                 String password = request.getParameter("txtPassword");
+                // 2 controller call method DAO object 
+                // 2.1 new DAO object 
+                
             }
         } finally {
             out.close();
