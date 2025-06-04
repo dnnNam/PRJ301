@@ -10,6 +10,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
+import namnd.registration.RegistrationDAO;
 
 /**
  *
@@ -35,19 +37,32 @@ public class LoginServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         // bring printwriter outside 
         PrintWriter out = response.getWriter();
+        //
+        String url = INVALID_PAGE;
         // get all information user 
         String button = request.getParameter("btAction");
 
         try {
             // check button have to click 
-            if(button.equals("Login")){
+            if (button.equals("Login")) {
                 String username = request.getParameter("txtUsername");
                 String password = request.getParameter("txtPassword");
                 // 2 controller call method DAO object 
                 // 2.1 new DAO object 
-                
+                RegistrationDAO dao = new RegistrationDAO();
+                // 2.2 call method checkLogin 
+                boolean result = dao.checkLogin(username, password);
+                // 3 process 
+                if (result) {
+                    url = SEARCH_PAGE;
+                }
             }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
         } finally {
+            response.sendRedirect(url);
             out.close();
         }
     }
