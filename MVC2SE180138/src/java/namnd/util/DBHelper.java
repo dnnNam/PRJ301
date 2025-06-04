@@ -16,7 +16,7 @@ import java.sql.SQLException;
 
 public class DBHelper {
     
-    public static Connection makeConnect ()
+    public static Connection makeConnection ()
     throws ClassNotFoundException , SQLException{
         
         //1 load driver
