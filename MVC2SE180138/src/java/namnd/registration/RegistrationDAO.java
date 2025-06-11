@@ -9,7 +9,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLWarning;
 import namnd.util.DBHelper;
 
 /**
@@ -22,7 +21,39 @@ public class RegistrationDAO implements Serializable{
     
     // method check account have been existed 
     public boolean checkLogin(String username , String password)
-    throws ClassNotFoundException , SQLException{
-      
+            throws ClassNotFoundException , SQLException{
+         boolean result = false;
+         Connection con = null; 
+         PreparedStatement stm = null;
+         ResultSet rs = null;
+         try {
+             // 1 model connect DB
+             con = DBHelper.makeConnection();
+             // 2.1write SQL String 
+             String sql = "Select username "
+                  +  "From Registration "
+                  + "Where username = ? "
+                  + "And password = ?";
+             // 2.2 nạp câu lệnh vào bộ nhớ  và check cú pháp 
+             stm = con.prepareStatement(sql);
+             stm.setString(1, username);
+             stm.setString(2, password);
+             rs = stm.executeQuery();
+             if(rs.next()){
+                 result = true;
+             }
+        } finally {
+             
+             if(rs != null){
+                 rs.close();
+             }
+             if(stm != null){
+                 stm.close();
+             }
+             if(con != null){
+                 con.close();
+             }
+        }
+         return result;
     }
 }

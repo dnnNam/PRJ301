@@ -7,7 +7,6 @@ package namnd.controller;
 
 import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -22,6 +21,7 @@ import jakarta.servlet.http.HttpServletResponse;
 public class DispatchServlet extends HttpServlet {
     private final String LOGIN_PAGE = "login.html";
     private final String LOGIN_CONTROLLER = "LoginServlet";
+    private final String SEARCH_LASTNAME_CONTROLLER = "SearchLastNameServlet";
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -43,6 +43,9 @@ public class DispatchServlet extends HttpServlet {
                switch (button) {
                    case"Login":
                        url = LOGIN_CONTROLLER;
+                       break;
+                   case"Search":
+                       url = SEARCH_LASTNAME_CONTROLLER;
                        break;
                    default:
                        throw new AssertionError();
