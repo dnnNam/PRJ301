@@ -5,6 +5,7 @@
 
 package namnd.controller;
 
+import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,6 +13,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
+import java.util.List;
+import namnd.registration.RegistrationDAO;
+import namnd.registration.RegistrationDTO;
 
 /**
  *
@@ -19,7 +24,7 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 @WebServlet(name="SearchLastNameServlet", urlPatterns={"/SearchLastNameServlet"})
 public class SearchLastNameServlet extends HttpServlet {
-   
+   private final String SEARCH_PAGE = "search.html";
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -30,9 +35,33 @@ public class SearchLastNameServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try  {
-            
+        // 1 get all information của user 
+        String searchValue = request.getParameter("txtSearchvalue");
+        String url = SEARCH_PAGE;
+        try {
+           if(!searchValue.trim().isEmpty()){
+             // 2 controller call method của model 
+             //2.1 new DAO object 
+               RegistrationDAO dao = new RegistrationDAO();
+             // 2.2 call method 
+             dao.searchLastName(searchValue);
+             // 3 process result 
+               List<RegistrationDTO> result = dao.getAccount();
+               for (RegistrationDTO items : result) {
+                   System.out.println("username: " + items.getUsername()
+                    + "password: " + items.getPassword() 
+                    + "Fullname: " + items.getFullname() );
+               }
+           }// user typed invalid value => go to SEARCH PAGE again
           
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }catch(ClassNotFoundException ex){
+            ex.printStackTrace();
+        }
+        finally{
+            RequestDispatcher rd = request.getRequestDispatcher(url);
+            rd.forward(request, response);
         }
     } 
 
