@@ -7,7 +7,6 @@ package namnd.controller;
 
 import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -25,6 +24,7 @@ import namnd.registration.RegistrationDTO;
 @WebServlet(name="SearchLastNameServlet", urlPatterns={"/SearchLastNameServlet"})
 public class SearchLastNameServlet extends HttpServlet {
    private final String SEARCH_PAGE = "search.html";
+   private final String SEARCH_RESULT = "search.jsp";
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -47,13 +47,18 @@ public class SearchLastNameServlet extends HttpServlet {
              dao.searchLastName(searchValue);
              // 3 process result 
                List<RegistrationDTO> result = dao.getAccount();
-               for (RegistrationDTO items : result) {
-                   System.out.println("username: " + items.getUsername()
-                    + "password: " + items.getPassword() 
-                    + "Fullname: " + items.getFullname() );
-               }
+               url = SEARCH_RESULT;
+               // in order to send data to servletShow 
+               // use attribute  don't use parameter 
+               // because handle in here server but paramter client -> server 
+               // through request , 1 reason data in DTO type List -> String 
+               // use attribute can modify , parameter (read only)
+               request.setAttribute("SEARCH_RESULT", result);
+               // setAttribute , if this attribute already exists , update it 
+               // if doest not exist then create it 
+               // setAttribute include new Attribute hay setAttribute 
            }// user typed invalid value => go to SEARCH PAGE again
-          
+           
         }catch(SQLException ex){
             ex.printStackTrace();
         }catch(ClassNotFoundException ex){

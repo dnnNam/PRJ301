@@ -11,16 +11,16 @@ package namnd.registration;
 public class RegistrationDTO {
     private String username;
     private String password;
-    private String fullname;
+    private String fullName;
     private boolean role;
 
     public RegistrationDTO() {
     }
 
-    public RegistrationDTO(String username, String password, String fullname, boolean role) {
+    public RegistrationDTO(String username, String password, String fullName, boolean role) {
         this.username = username;
         this.password = password;
-        this.fullname = fullname;
+        this.fullName = fullName;
         this.role = role;
     }
 
@@ -52,18 +52,15 @@ public class RegistrationDTO {
         this.password = password;
     }
 
-    /**
-     * @return the fullname
-     */
-    public String getFullname() {
-        return fullname;
+    public String getFullName() {
+        return fullName;
     }
 
     /**
      * @param fullname the fullname to set
      */
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
+    public void setFullName(String fullname) {
+        this.fullName = fullName;
     }
 
     /**

@@ -78,55 +78,56 @@ public class RegistrationDAO implements Serializable {
     public List<RegistrationDTO> getAccount() {
         return accounts;
     }
-    
+
     // searchLastName 
     public void searchLastName(String searchValue)
             throws SQLException, ClassNotFoundException {
+        // tạo tên biê 
         Connection con = null;
         PreparedStatement stm = null;
         ResultSet rs = null;
         try {
-            // 1 connect với DB 
+            // 1 model connect DB 
             con = DBHelper.makeConnection();
+            // 2 model truy vấn dữ liệu dưới database
+            // 2.1 write SQl String 
             if (con != null) {
-               //2.1 create SQL String 
-               String sql ="Select username, password, lastname, isAdmin "
-                       +"From Registration "
-                       +"Where lastname Like ?";
-               //2.2 create StateMent object 
-               stm = con.prepareStatement(sql);
-               stm.setString(1, "%" + searchValue + "%");
-               // 3 execute 
-               rs = stm.executeQuery();
-               // process result 
-               while(rs.next()){
-                   // get data from ResultSet
-                   String username = rs.getString("username");
-                   String password = rs.getString("password");
-                   String fullname = rs.getString("lastname");
-                   Boolean role = rs.getBoolean("isAdmin");
-                   // set data to DTO properties 
-                   RegistrationDTO dto = new RegistrationDTO(username, password, fullname, role);
-                   if(this.accounts == null){
-                       this.accounts = new ArrayList<RegistrationDTO>();
-                       // nhớ new arraylist nha không vá 21 cái hàm á 
-                   }// account are unvaiable
-                   this.accounts.add(dto);
-               }// traversal all Result set 
-            }// end connection is available
-
+                String sql = "Select username , password , lastname , isAdmin "
+                        + "From Registration "
+                        + "Where lastname Like ?";
+                //2.2 nạp câu lệnh vào bộ nhớ 
+                stm = con.prepareStatement(sql);
+                stm.setString(1, "%" + searchValue + "%");
+                // 2.3 execute query 
+                rs = stm.executeQuery();
+                // 3 model set data to properties model 
+                while (rs.next()) {
+                    String username = rs.getString("username");
+                    String password = rs.getString("password");
+                    String fullname = rs.getString("lastname");
+                    boolean role = rs.getBoolean("isAdmin");
+                    RegistrationDTO dto = new RegistrationDTO(username, password, fullname, role);
+                    // set 
+                    if (this.accounts == null) {
+                        this.accounts = new ArrayList<>();
+                    }
+                    this.accounts.add(dto);
+                }
+            }
         } finally {
-            if(rs != null){
+            if (rs != null) {
                 rs.close();
             }
-            
-            if(stm != null){
+
+            if (stm != null) {
                 stm.close();
             }
+
             if (con != null) {
                 con.close();
             }
         }
+
     }
 
 }
