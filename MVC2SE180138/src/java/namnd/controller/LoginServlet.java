@@ -11,8 +11,10 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import namnd.registration.RegistrationDAO;
+import namnd.registration.RegistrationDTO;
 
 /**
  *
@@ -21,7 +23,7 @@ import namnd.registration.RegistrationDAO;
 public class LoginServlet extends HttpServlet {
 
     // create 2 constant page help to navigator
-    private final String SEARCH_PAGE = "search.html";
+    private final String SEARCH_PAGE = "search.jsp";
     private final String INVALID_PAGE = "invalid.html";
 
     /**
@@ -46,8 +48,10 @@ public class LoginServlet extends HttpServlet {
             // 2.controller new DAO 0bject
             RegistrationDAO dao = new RegistrationDAO();
             // 2.1 call method của DAO object 
-            boolean result = dao.checkLogin(username, password);
-            if(result){
+            RegistrationDTO result = dao.checkLogin(username, password);
+            if(result != null){
+                HttpSession session = request.getSession();
+                session.setAttribute("USER_INFOR", result);
                 url = SEARCH_PAGE;
             }
         }catch(ClassNotFoundException ex){

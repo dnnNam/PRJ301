@@ -14,6 +14,9 @@
         <title>Search</title>
     </head>
     <body>
+        <font style="red">
+        Welcome, ${sessionScope.USER_INFOR.fullName}
+        </font>
         <h1>Search Page</h1>
         <form action="DispatchServlet" method="GET">
             Search Value<input type="text" name="txtSearchvalue" 

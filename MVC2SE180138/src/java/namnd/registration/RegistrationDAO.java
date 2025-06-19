@@ -22,9 +22,9 @@ public class RegistrationDAO implements Serializable {
     // format bit stream , bytestream 
 
     // method check account have been existed 
-    public boolean checkLogin(String username, String password)
+    public RegistrationDTO checkLogin(String username, String password)
             throws ClassNotFoundException, SQLException {
-        boolean result = false;
+        RegistrationDTO result = null;
         Connection con = null;
         PreparedStatement stm = null;
         ResultSet rs = null;
@@ -36,7 +36,7 @@ public class RegistrationDAO implements Serializable {
                 //2. model truy vân dữ liệu từ database
                 //2.1 write SQL String
 
-                String sql = "Select username "
+                String sql = "Select lastname , isAdmin "
                         + "From Registration "
                         + "Where username = ? "
                         + "And password = ?";
@@ -53,7 +53,10 @@ public class RegistrationDAO implements Serializable {
                 //3 model get data from ....... then 
                 // model sets data to properties of model 
                 if (rs.next()) {
-                    result = true;
+                    String fullname = rs.getString("lastname");
+                    boolean role = rs.getBoolean("isAdmin");
+                    result = new RegistrationDTO(username, null, fullname, role);
+                    
                 }
                 // next có thì bằng true
             }// connection is an avaiable
