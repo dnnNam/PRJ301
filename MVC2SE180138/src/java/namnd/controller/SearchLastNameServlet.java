@@ -59,10 +59,10 @@ public class SearchLastNameServlet extends HttpServlet {
                // setAttribute include new Attribute hay setAttribute 
            }// user typed invalid value => go to SEARCH PAGE again
            
-        }catch(SQLException ex){
-            ex.printStackTrace();
         }catch(ClassNotFoundException ex){
-            ex.printStackTrace();
+            log("Class not found: " + ex.getMessage());
+        }catch(SQLException ex){
+            log("SQL: " + ex.getMessage());
         }
         finally{
             RequestDispatcher rd = request.getRequestDispatcher(url);

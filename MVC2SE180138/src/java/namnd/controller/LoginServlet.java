@@ -38,34 +38,32 @@ public class LoginServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
-      // mặc định nếu login mà không được sẽ là trang invalid 
-      String url = INVALID_PAGE;
-      // 1 get userInfor
-      String username = request.getParameter("txtUsername");
-      String password = request.getParameter("txtPassword");
+
+        // mặc định nếu login mà không được sẽ là trang invalid 
+        String url = INVALID_PAGE;
+        // 1 get userInfor
+        String username = request.getParameter("txtUsername");
+        String password = request.getParameter("txtPassword");
         try {
             // 2.controller new DAO 0bject
             RegistrationDAO dao = new RegistrationDAO();
             // 2.1 call method của DAO object 
             RegistrationDTO result = dao.checkLogin(username, password);
-            if(result != null){
+            if (result != null) {
                 HttpSession session = request.getSession();
                 session.setAttribute("USER_INFOR", result);
                 url = SEARCH_PAGE;
             }
-        }catch(ClassNotFoundException ex){
-            ex.printStackTrace();
-        }catch(SQLException ex){
-            ex.printStackTrace();
-        }
-        finally {
+        } catch (ClassNotFoundException ex) {
+            log("Class not found: " + ex.getMessage());
+        } catch (SQLException ex) {
+            log("SQL: " + ex.getMessage());
+        } finally {
             RequestDispatcher rd = request.getRequestDispatcher(url);
             rd.forward(request, response);
-            
+
         }
-       
-       
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

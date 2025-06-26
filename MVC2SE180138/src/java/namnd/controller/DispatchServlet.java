@@ -21,6 +21,7 @@ import jakarta.servlet.http.HttpServletResponse;
 public class DispatchServlet extends HttpServlet {
     private final String LOGIN_PAGE = "login.html";
     private final String LOGIN_CONTROLLER = "LoginServlet";
+    private final String DELETE_CONTROLLER = "DeleteServlet";
     private final String SEARCH_LASTNAME_CONTROLLER = "SearchLastNameServlet";
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -47,6 +48,10 @@ public class DispatchServlet extends HttpServlet {
                    case"Search":
                        url = SEARCH_LASTNAME_CONTROLLER;
                        break;
+                   case"Delete":
+                       url = DELETE_CONTROLLER;
+                       break;
+                       
                    default:
                        throw new AssertionError();
                }

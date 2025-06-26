@@ -4,7 +4,6 @@
     Author     : Hi
 --%>
 
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%--<%@page import="java.util.List" %>
@@ -26,6 +25,7 @@
             <input type="submit" value="Search"  name="btAction"/>
         </form> <br/>
         <c:set var="searchValue" value="${param.txtSearchvalue}" />
+        
         <c:if test="${not empty searchValue}">
             <c:set var="result" value="${requestScope.SEARCH_RESULT}"/>
             <c:if test="${not empty result}">
@@ -56,6 +56,16 @@
                                 </td>
                                 <td>
                                     ${dto.role}
+                                </td>
+                                <td>
+                                    <c:url var="deleteLink" value="DispatchServlet">
+                                        <c:param name="btAction" value="Delete" />
+                                        <c:param name="pk" value="${dto.username}" />
+                                        <c:param name="searchLastName" 
+                                                 value="${param.txtSearchvalue}" />
+                                    </c:url>
+                                    <a href="${deleteLink}">Delete</a> 
+                                       
                                 </td>
                             </tr>
                         </c:forEach>
