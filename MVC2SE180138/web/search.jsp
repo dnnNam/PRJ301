@@ -51,7 +51,7 @@
                                 <td>
                                     ${dto.username}
                                     <input type="hidden" name="txtUsername" 
-                                           value=" ${dto.username}" />
+                                           value="${dto.username}" />
                                 </td>
                                 <td>
                                     <input type="text" name="txtPassword" value="${dto.password}" />

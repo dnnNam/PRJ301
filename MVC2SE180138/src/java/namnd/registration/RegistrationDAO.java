@@ -171,5 +171,51 @@ public class RegistrationDAO implements Serializable {
         }
         return result;    
     }
+    
+    
+    // update 
+    public boolean updateAccounts (String username , String password , String isAdmin)
+    throws ClassNotFoundException , SQLException{
+        boolean result = false;
+        
+        Connection con = null;
+        PreparedStatement stm = null;        
+        try {
+            // 1 model connect với database 
+            con = DBHelper.makeConnection();
+            if(con != null){
+                // 2 model query from database 
+                // 2.1 write SQL String 
+                String sql = "Update Registration " + 
+                        "Set password = ? , isAdmin = ? "+
+                        "Where username = ?";
+                // 2.2 nạp vào object Statement 
+                stm = con.prepareStatement(sql);
+                stm.setString(1, password);
+                // kiểm tra checkBox 
+                if(isAdmin != null && isAdmin.equals("ON")){
+                    stm.setString(2, "1");
+                }else{
+                    stm.setString(2, "0");
+                }
+                stm.setString(3, username);
+                // 2.3 thực thi
+                // vì thực delete 1 dòng dưới table sẽ trả ra số nguyên > 0
+                int effectRows = stm.executeUpdate();
+                if(effectRows > 0){
+                    result = true;
+                }
+            }// connection is an available
+        } finally {
+            if(stm != null){
+                stm.close();
+            }
+            
+            if(con != null){
+                con.close();
+            }
+        }
+        return result;    
+    }
 
 }

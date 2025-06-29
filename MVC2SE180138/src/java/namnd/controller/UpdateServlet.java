@@ -12,6 +12,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
 import namnd.registration.RegistrationDAO;
 
 /**
@@ -20,7 +21,7 @@ import namnd.registration.RegistrationDAO;
  */
 @WebServlet(name="UpdateServlet", urlPatterns={"/UpdateServlet"})
 public class UpdateServlet extends HttpServlet {
-   
+    private final String ERROR_PAGE = "error.html";
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -36,13 +37,26 @@ public class UpdateServlet extends HttpServlet {
         String password = request.getParameter("txtPassword");
         String isAdmin = request.getParameter("chkAdmin");
         String searchValue = request.getParameter("searchLastValue");
+        String url = ERROR_PAGE;
         try  {
             // 2. controller new DAO object 
             RegistrationDAO dao = new RegistrationDAO();
-            // 2.1 controller call method của dao object  
+            // 2.1 controller call method của dao object 
+            boolean result = dao.updateAccounts(username, password, isAdmin);
+            if(result){
+                // refresh ---> call previous functions again 
+                // ---> remind ---> add request parameters based on how many input controls 
+                url = "DispatchServlet?" + 
+                      "btAction=Search" + 
+                      "&txtSearchvalue="+ searchValue;  
+            }// update successfully
            
+        }catch(ClassNotFoundException ex){
+            log("Class not found: " + ex.getMessage());
+        }catch(SQLException ex){
+            log("SQL: " + ex.getMessage());
         }finally{
-            
+            response.sendRedirect(url);
         }
     } 
 
