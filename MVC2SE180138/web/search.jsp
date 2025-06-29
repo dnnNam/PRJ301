@@ -37,25 +37,33 @@
                             <th>password</th>
                             <th>Full Name</th>
                             <th>Role</th>
+                            <th>Delete</th>
+                            <th>Update</th>
                         </tr>
                     </thead>
                     <tbody>
                         <c:forEach var="dto" items="${result}" varStatus="counter" >
+                        <form name="btAction" action="DispatchServlet" method="POST">
                             <tr>
                                 <td>
                                     ${counter.count}
                                 </td>
                                 <td>
                                     ${dto.username}
+                                    <input type="hidden" name="txtUsername" 
+                                           value=" ${dto.username}" />
                                 </td>
                                 <td>
-                                    ${dto.password}
+                                    <input type="text" name="txtPassword" value="${dto.password}" />
                                 </td>
                                 <td>
                                     ${dto.fullName}
                                 </td>
                                 <td>
-                                    ${dto.role}
+                                    <input type="checkbox" name="chkAdmin" value="ON" 
+                                           <c:if test="${dto.role}">
+                                               checked="checked"
+                                           </c:if>
                                 </td>
                                 <td>
                                     <c:url var="deleteLink" value="DispatchServlet">
@@ -67,7 +75,15 @@
                                     <a href="${deleteLink}">Delete</a> 
                                        
                                 </td>
+                                <td>
+                                    <input type="hidden" name="searchLastValue" 
+                                           value="${searchValue}" /> 
+                                    <input type="submit" value="Update" name="btAction"/>
+                                </td>
                             </tr>
+                        </form>
+                            
+                            
                         </c:forEach>
                     </tbody>
                 </table>

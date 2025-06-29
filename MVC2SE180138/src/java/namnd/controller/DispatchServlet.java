@@ -23,6 +23,7 @@ public class DispatchServlet extends HttpServlet {
     private final String LOGIN_CONTROLLER = "LoginServlet";
     private final String DELETE_CONTROLLER = "DeleteServlet";
     private final String SEARCH_LASTNAME_CONTROLLER = "SearchLastNameServlet";
+    private final String UPDATE_CONTROLLER = "UpdateServlet";
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -50,6 +51,9 @@ public class DispatchServlet extends HttpServlet {
                        break;
                    case"Delete":
                        url = DELETE_CONTROLLER;
+                       break;
+                   case"Update":
+                       url = UPDATE_CONTROLLER;
                        break;
                        
                    default:
