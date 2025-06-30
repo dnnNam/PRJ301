@@ -8,6 +8,7 @@ import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -53,6 +54,14 @@ public class LoginServlet extends HttpServlet {
                 HttpSession session = request.getSession();
                 session.setAttribute("USER_INFOR", result);
                 url = SEARCH_PAGE;
+                // write : mỗi lần login thành công thì sẽ lưu cookies 
+                // => lưu thông tin để duy trì đăng nhập 
+                // 1. tạo cookie 
+                Cookie cookie = new Cookie(username, password);
+                // set thời gian ton tai cho cookie 
+                cookie.setMaxAge(60 * 3);
+                // 3 trả cookies ra thông qua response 
+                response.addCookie(cookie);
             }
         } catch (ClassNotFoundException ex) {
             log("Class not found: " + ex.getMessage());

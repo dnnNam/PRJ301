@@ -24,6 +24,7 @@ public class DispatchServlet extends HttpServlet {
     private final String DELETE_CONTROLLER = "DeleteServlet";
     private final String SEARCH_LASTNAME_CONTROLLER = "SearchLastNameServlet";
     private final String UPDATE_CONTROLLER = "UpdateServlet";
+    private final String STARTUP_CONTROLLER = "StartUpServlet";
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -39,7 +40,10 @@ public class DispatchServlet extends HttpServlet {
         String button = request.getParameter("btAction");
         String url = LOGIN_PAGE;
         try{
-           if(button == null){
+           if(button == null){ // request đầu tiên 
+               // lần đầu tiên check cookies đã có tồn tại hay chưa 
+               // nếu chưa có thì chắc chắn là lần thứ nhất 
+               url = STARTUP_CONTROLLER; 
                
            }else{
                switch (button) {
