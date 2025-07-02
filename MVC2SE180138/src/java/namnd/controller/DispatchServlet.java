@@ -25,6 +25,8 @@ public class DispatchServlet extends HttpServlet {
     private final String SEARCH_LASTNAME_CONTROLLER = "SearchLastNameServlet";
     private final String UPDATE_CONTROLLER = "UpdateServlet";
     private final String STARTUP_CONTROLLER = "StartUpServlet";
+    private final String CREATE_ACCOUNT_CONTROLLER = "AddAccountServlet";
+    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -58,6 +60,9 @@ public class DispatchServlet extends HttpServlet {
                        break;
                    case"Update":
                        url = UPDATE_CONTROLLER;
+                       break;
+                   case"CreateAccount":
+                       url = CREATE_ACCOUNT_CONTROLLER;
                        break;
                        
                    default:

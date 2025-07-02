@@ -218,4 +218,47 @@ public class RegistrationDAO implements Serializable {
         return result;    
     }
 
+    
+    // create Account
+    public boolean createAccount (RegistrationDTO dto)
+    throws ClassNotFoundException , SQLException{
+        boolean result = false;
+        
+        Connection con = null;
+        PreparedStatement stm = null;        
+        try {
+            // 1 model connect với database 
+            con = DBHelper.makeConnection();
+            if(con != null){
+                // 2 model query from database 
+                // 2.1 write SQL String 
+                String sql = "INSERT INTO Registration("
+                        +"username, password , lastname , isAdmin"
+                        +") Values("
+                        +"?, ?, ?, ?"
+                        +")";        
+                // 2.2 nạp vào object Statement 
+                stm = con.prepareStatement(sql);
+                stm.setString(1, dto.getUsername());
+                stm.setString(2, dto.getPassword());
+                stm.setString(3, dto.getFullName());
+                stm.setBoolean(4, dto.isRole());
+                // 2.3 thực thi
+                // vì thực delete 1 dòng dưới table sẽ trả ra số nguyên > 0
+                int effectRows = stm.executeUpdate();
+                if(effectRows > 0){
+                    result = true;
+                }
+            }// connection is an available
+        } finally {
+            if(stm != null){
+                stm.close();
+            }
+            
+            if(con != null){
+                con.close();
+            }
+        }
+        return result;    
+    }
 }
