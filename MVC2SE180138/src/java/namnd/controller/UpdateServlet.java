@@ -26,6 +26,7 @@ import namnd.registration.RegistrationDTO;
 @WebServlet(name="UpdateServlet", urlPatterns={"/UpdateServlet"})
 public class UpdateServlet extends HttpServlet {
     private final String ERROR_PAGE = "error.html";
+    private final String SEARCH_PAGE = "search.jsp";
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -58,7 +59,7 @@ public class UpdateServlet extends HttpServlet {
             if(foundErr){
                 url = SEARCH_PAGE;
                 dao.searchLastName(searchValue);
-                List<RegistrationDTO> listSearch = dao.getAccounts();
+                List<RegistrationDTO> listSearch = dao.getAccount();
                 
                 for (RegistrationDTO dto: listSearch) {
                     if(dto.getUsername().equals(username)){
@@ -77,7 +78,7 @@ public class UpdateServlet extends HttpServlet {
                 rd.forward(request, response);
                 return;
             }
-            boolean result = dao.updateAccount(username, password, isAdmin);
+            boolean result = dao.updateAccounts(username, password, isAdmin);
             if(result){
                 // refresh 
                 // remind bổ sung các request parameter vào URL 

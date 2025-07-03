@@ -19,15 +19,25 @@
         Welcome, ${sessionScope.USER_INFOR.fullName}
         </font>
         <h1>Search Page</h1>
+        <%-- xử lý giá trị tìm kiếm khi update --%>
+         <c:choose>
+             <c:when test="${not empty requestScope.SEARCH_VALUE}">
+                 <c:set var="lastSearchValue" value="${requestScope.SEARCH_VALUE}"/>
+             </c:when>
+             <c:otherwise>
+                 <c:set var="lastSearchValue" value="${param.txtSearchvalue}" />
+             </c:otherwise>
+         </c:choose>
         <form action="DispatchServlet" method="GET">
             Search Value<input type="text" name="txtSearchvalue" 
-                               value="${param.txtSearchvalue}" /> <br/>     
+                               value="${lastSearchValue}" /> <br/>     
             <input type="submit" value="Search"  name="btAction"/>
         </form> <br/>
-        <c:set var="searchValue" value="${param.txtSearchvalue}" />
+        <c:set var="searchValue" value="${lastSearchValue}" />
         
         <c:if test="${not empty searchValue}">
             <c:set var="result" value="${requestScope.SEARCH_RESULT}"/>
+            <c:set var="error" value="${requestScope.CREATE_ERROR}"/>
             <c:if test="${not empty result}">
                 <table border="1">
                     <thead>
@@ -54,7 +64,12 @@
                                            value="${dto.username}" />
                                 </td>
                                 <td>
-                                    <input type="text" name="txtPassword" value="${dto.password}" />
+                                    <input type="text" name="txtPassword" value="${dto.password}" /> (6 - 20 chars) </br>
+                                    <c:if test="${ requestScope.ERROR_USER eq dto.username && not empty error}">
+                                        <font color="red">
+                                            ${error.passwordLengthErr}
+                                        </font>
+                                    </c:if>
                                 </td>
                                 <td>
                                     ${dto.fullName}
@@ -76,7 +91,7 @@
                                        
                                 </td>
                                 <td>
-                                    <input type="hidden" name="searchLastValue" 
+                                    <input type="hidden" name="lastSearchValue" 
                                            value="${searchValue}" /> 
                                     <input type="submit" value="Update" name="btAction"/>
                                 </td>
