@@ -14,7 +14,7 @@
     </head>
     <body>
        <h1>Create Account Page</h1>
-        <form method="POST">
+       <form action="DispatchServlet" method="POST">
             <c:set var="errors" value="${requestScope.CREATE_ERRORS}" />
             Username* <input type="text" name="txtUsername" value="${param.txtUsername}" />(6 - 30 chars)<br/>
             <c:if test="${not empty errors.usernameLengthErr}">
@@ -27,13 +27,13 @@
                     ${errors.usernameIsExisted}
                 </font> <br/>
             </c:if>
-                Password* <input type="password" name="txtPassword" value="${param.txtPassword}" />(6 - 20 chars)<br/>
+                Password* <input type="password" name="txtPassword" value="" />(6 - 20 chars)<br/>
             <c:if test="${not empty errors.passwordLengthErr}">
                 <font color="red">
                     ${errors.passwordLengthErr}
                 </font> <br/>
             </c:if>
-                Confirm*  <input type="password" name="txtConfirm" value="${param.txtConfirm}" /><br/>
+                Confirm*  <input type="password" name="txtConfirm" value="" /><br/>
             <c:if test="${not empty errors.confirmNotMatched}">
                 <font color="red">
                     ${errors.confirmNotMatched}
@@ -45,8 +45,6 @@
                     ${errors.fullNameLengthErr}
                 </font> <br/>
             </c:if>
-           
-            
             <input type="submit" value="CreateAccount" name="btAction" /> 
             <input type="reset" value="reset" />   
         </form>

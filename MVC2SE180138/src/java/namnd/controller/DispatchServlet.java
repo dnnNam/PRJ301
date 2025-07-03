@@ -26,6 +26,7 @@ public class DispatchServlet extends HttpServlet {
     private final String UPDATE_CONTROLLER = "UpdateServlet";
     private final String STARTUP_CONTROLLER = "StartUpServlet";
     private final String CREATE_ACCOUNT_CONTROLLER = "AddAccountServlet";
+    private final String LOGOUT_CONTROLLER = "LogoutServlet";
     
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -63,6 +64,9 @@ public class DispatchServlet extends HttpServlet {
                        break;
                    case"CreateAccount":
                        url = CREATE_ACCOUNT_CONTROLLER;
+                       break;
+                   case"logout":
+                       url = LOGOUT_CONTROLLER;
                        break;
                        
                    default:

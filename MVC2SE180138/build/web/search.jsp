@@ -97,7 +97,10 @@
                 </h2>
             </c:if>
         </c:if>
-              
+        
+        <form action="DispatchServlet">
+            <input type="submit" value="logout" name="btAction" />
+        </form>
               
         <%--<% 
             // service()

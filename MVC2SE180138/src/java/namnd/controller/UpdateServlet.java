@@ -5,6 +5,7 @@
 
 package namnd.controller;
 
+import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,7 +14,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
+import java.util.List;
+import namnd.registration.RegistrationCreateError;
 import namnd.registration.RegistrationDAO;
+import namnd.registration.RegistrationDTO;
 
 /**
  *
@@ -29,36 +33,69 @@ public class UpdateServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        // 1.get all information user 
+        // getUserInfor
         String username = request.getParameter("txtUsername");
         String password = request.getParameter("txtPassword");
         String isAdmin = request.getParameter("chkAdmin");
-        String searchValue = request.getParameter("searchLastValue");
+        String searchValue = request.getParameter("lastSearchValue");
         String url = ERROR_PAGE;
+        boolean foundErr = false;
+        RegistrationCreateError errors = new RegistrationCreateError();
         try  {
-            // 2. controller new DAO object 
+            // phải kiểm tra password để khớp với chức năng create Account 
+            if(password.trim().length() < 6 || password.trim().length() > 20){
+                foundErr = true;
+                errors.setPasswordLengthErr("password is required from 6 to 20 characters");
+            }
+
+            // 2.1 call DAO object 
             RegistrationDAO dao = new RegistrationDAO();
-            // 2.1 controller call method của dao object 
-            boolean result = dao.updateAccounts(username, password, isAdmin);
+            // 2.2 controller call method DAO object
+            
+            if(foundErr){
+                url = SEARCH_PAGE;
+                dao.searchLastName(searchValue);
+                List<RegistrationDTO> listSearch = dao.getAccounts();
+                
+                for (RegistrationDTO dto: listSearch) {
+                    if(dto.getUsername().equals(username)){
+                        dto.setPassword(password);
+                    }
+                }
+                request.setAttribute("SEARCH_RESULT", listSearch);
+                // update lại SEARCH RESULT để hiển thị lại kết quả nhập sai 
+                // lưu username để biết rõ dòng nào bị lỗi update chính xác 
+                // dòng đó 
+                request.setAttribute("ERROR_USER", username);
+                // lưu lỗi để hiển thị 
+                request.setAttribute("CREATE_ERROR", errors);
+                request.setAttribute("SEARCH_VALUE", searchValue);
+                RequestDispatcher rd = request.getRequestDispatcher(url);
+                rd.forward(request, response);
+                return;
+            }
+            boolean result = dao.updateAccount(username, password, isAdmin);
             if(result){
-                // refresh ---> call previous functions again 
-                // ---> remind ---> add request parameters based on how many input controls 
-                url = "DispatchServlet?" + 
-                      "btAction=Search" + 
-                      "&txtSearchvalue="+ searchValue;  
-            }// update successfully
-           
+                // refresh 
+                // remind bổ sung các request parameter vào URL 
+                url = "DispatchServlet?"
+                       + "btAction=Search" 
+                       + "&txtSearchvalue=" + searchValue; 
+                response.sendRedirect(url);
+                return;
+            }
         }catch(ClassNotFoundException ex){
-            log("Class not found: " + ex.getMessage());
-        }catch(SQLException ex){
             log("SQL: " + ex.getMessage());
-        }finally{
-            response.sendRedirect(url);
+        }catch(SQLException ex){
+            log("Class Not Found: " + ex.getMessage());
         }
+        
+        
     } 
+
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 

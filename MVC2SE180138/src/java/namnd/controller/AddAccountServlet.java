@@ -5,6 +5,7 @@
 
 package namnd.controller;
 
+import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -60,9 +61,9 @@ public class AddAccountServlet extends HttpServlet {
                foundErr = true;
                errors.setConfirmNotMatched("confirm must be match password");
            }
-           if(fullName.trim().length() < 2 || fullName.trim().length() > 50){
+           if(fullName.trim().length() < 2 || fullName.trim().length() > 40){
                foundErr = true;
-               errors.setUsernameLengthErr("Username is required from 2 to 50 characters");
+               errors.setFullNameLengthErr("Fullname is required from 2 to 40 characters");
            }
            
            // nếu như có lỗi thì lưu lỗi hiển thị ra cho người dùng 
@@ -75,7 +76,7 @@ public class AddAccountServlet extends HttpServlet {
                boolean result = dao.createAccount(dto);
                // 4 process 
                if(result){
-                   url = ERROR_PAGE;
+                   url = LOGIN_PAGE;
                }
            }
         }catch(ClassNotFoundException ex){
@@ -85,12 +86,13 @@ public class AddAccountServlet extends HttpServlet {
             String msg = ex.getMessage();
             log("SQL: " + msg);
             if(msg.contains("duplicate")){
-                errors.setUsernameIsExisted(username + "is Existed");
+                errors.setUsernameIsExisted(username + " is Existed");
                 request.setAttribute("CREATE_ERRORS", errors);
             }
             
         }finally{
-            
+            RequestDispatcher rd = request.getRequestDispatcher(url);
+            rd.forward(request, response);
         }
     } 
 
