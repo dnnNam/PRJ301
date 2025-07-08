@@ -41,7 +41,7 @@ public class UpdateServlet extends HttpServlet {
         String url = ERROR_PAGE;
         try {
            int pkNumber = Integer.parseInt(pk);
-           float priceNumber = Float.parseFloat(price);
+           double priceNumber = Double.parseDouble(price);
            int quantityNumber = Integer.parseInt(quantity);
            // new Dao object 
             TblWatchDAO dao = new TblWatchDAO();

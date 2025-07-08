@@ -75,7 +75,7 @@ public class TblWatchDAO implements Serializable {
      }      
     
     
-    public boolean updateWatch(String description , float price , int quantity , int pk)
+    public boolean updateWatch(String description , double price , int quantity , int pk)
     throws ClassNotFoundException , SQLException{
             Connection con = null;
             PreparedStatement stm = null;
@@ -90,7 +90,7 @@ public class TblWatchDAO implements Serializable {
                             + "where id =?";
                     stm = con.prepareStatement(sql);
                     stm.setString(1, description);
-                    stm.setFloat(2, price);
+                    stm.setDouble(2, price);
                     stm.setInt(3, quantity);
                     stm.setInt(4, pk);
                     // excute 
