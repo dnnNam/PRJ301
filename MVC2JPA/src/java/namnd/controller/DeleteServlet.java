@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
+import namnd.registration.RegistrationBLO;
 import namnd.registration.RegistrationDAO;
 
 /**
@@ -39,9 +40,11 @@ public class DeleteServlet extends HttpServlet {
         try {
             // 2 controller call method của model 
             // 2.1 new DAO object 
-            RegistrationDAO dao = new RegistrationDAO();
+//            RegistrationDAO dao = new RegistrationDAO();
+              RegistrationBLO blo  = new RegistrationBLO();
             // 2.2 controller call method từ DAO object 
-            boolean result = dao.deleteAccount(username);
+//            boolean result = dao.deleteAccount(username);
+              boolean result = blo.deleteAccount(username);
             // process
             if(result){
                 // refesh --> call previous functionc again
@@ -50,10 +53,10 @@ public class DeleteServlet extends HttpServlet {
                         +"?btAction=Search"
                         +"&txtSearchvalue=" + searchValue;
             }// detele successfully
-        }catch(ClassNotFoundException ex){
-            log("SQL: " + ex.getMessage());
-        }catch(SQLException ex){
-            log("Class Not Found: " + ex.getMessage());
+//        }catch(ClassNotFoundException ex){
+//            log("SQL: " + ex.getMessage());
+//        }catch(SQLException ex){
+//            log("Class Not Found: " + ex.getMessage());
         }
         finally{
             // ở đây dùng sendRedirect vì trong request Scope hiện tại có tới 

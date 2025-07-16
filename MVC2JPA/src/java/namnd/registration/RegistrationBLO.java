@@ -33,50 +33,67 @@ public class RegistrationBLO {
             em.close();
         }
     }
-    
-    public Registration checkLogin(String username ,String password){
+
+    public Registration checkLogin(String username, String password) {
         Registration result = null;
         EntityManager em = emf.createEntityManager();
         String jpql = "Select  r "
-                        +"From Registration r "
-                        +"Where r.username = :username "
-                        +"And r.password = :password";
+                + "From Registration r "
+                + "Where r.username = :username "
+                + "And r.password = :password";
         try {
             Query query = em.createQuery(jpql);
-            
+
             query.setParameter("username", username);
             query.setParameter("password", password);
-            
+
             // lấy một dòng dùng single 
-            result = (Registration) query.getSingleResult();          
+            result = (Registration) query.getSingleResult();
 
         } finally {
             em.close();
         }
-        
+
         return result;
     }
-    
-    public List<Registration> searchLastname(String searchValue){
+
+    public List<Registration> searchLastname(String searchValue) {
         List<Registration> result = null;
         EntityManager em = emf.createEntityManager();
         String jpql = "Select  r "
-                        +"From Registration r "
-                        +"Where r.lastname like :lastname";
-                       
+                + "From Registration r "
+                + "Where r.lastname like :lastname";
+
         try {
             Query query = em.createQuery(jpql);
-            
+
             query.setParameter("lastname", "%" + searchValue + "%");
             result = query.getResultList();
-                  
 
         } finally {
             em.close();
         }
-        
+
         return result;
-        
+
     }
-    
+
+    public boolean deleteAccount(String username) {
+        boolean result = false;
+        EntityManager em = emf.createEntityManager();
+        try {
+            Registration req = em.find(Registration.class, username);
+            if (req != null) {
+                em.getTransaction().begin();
+                em.remove(req);
+                em.getTransaction().commit();
+            }
+
+            result = true;
+        } finally {
+            em.close();
+        }
+        return result;
+    }
+
 }
